@@ -1,0 +1,177 @@
+CREATE database assignment21;
+
+use assignment21;
+CREATE TABLE PUBLISHERS
+(
+    PUBID      int   PRIMARY KEY,
+    PNAME      VARCHAR(30),
+    EMAIL      VARCHAR(50)  UNIQUE,
+    PHONE      VARCHAR(30)
+);
+
+
+CREATE TABLE  SUBJECTS
+(
+    SUBID      VARCHAR(5) PRIMARY KEY,
+    SNAME      VARCHAR(30)
+);
+
+
+CREATE TABLE  AUTHORS
+(
+    AUID     int  PRIMARY KEY,
+    ANAME      VARCHAR(30),
+    EMAIL      VARCHAR(50)  UNIQUE,
+    PHONE      VARCHAR(30)
+);
+
+
+
+CREATE TABLE  TITLES
+(
+    TITLEID    int PRIMARY KEY,
+    TITLE      VARCHAR(30),
+    PUBID      int,
+    SUBID      VARCHAR(5),
+    PUBDATE    DATE,
+    COVER      CHAR(1)  CHECK ( COVER IN ('P','H','p','h')),
+    PRICE      int,
+	CONSTRAINT TITLES_PUBID_FK FOREIGN KEY (PUBID) REFERENCES PUBLISHERS(PUBID),
+	CONSTRAINT TITLES_SUBID_FK FOREIGN KEY (SUBID) REFERENCES SUBJECTS(SUBID)
+);
+
+
+
+CREATE TABLE  TITLEAUTHORS
+(
+    TITLEID    int,
+    AUID       int,
+    IMPORTANCE int,
+   PRIMARY KEY(TITLEID,AUID),
+   CONSTRAINT  TITLESAUTHORS_TITLEID_FK FOREIGN KEY (TITLEID) REFERENCES TITLES(TITLEID),
+   CONSTRAINT  TITLESAUTHORS_AUTHID_FK FOREIGN KEY (AUID) REFERENCES AUTHORS(AUID)
+);
+
+CREATE TABLE  SUBJECTS_BACKUP
+(
+    SUBID      VARCHAR(5) PRIMARY KEY,
+    SNAME      VARCHAR(30)
+);
+
+ INSERT INTO SUBJECTS VALUES ('ORA','ORACLE DATABASE 10g');
+ INSERT INTO SUBJECTS VALUES ('JAVA','JAVA LANGUAGE');
+ INSERT INTO SUBJECTS VALUES ('JEE','JAVA ENTEPRISE EDITION');
+ INSERT INTO SUBJECTS VALUES ('VB','VISUAL BASIC.NET');
+ INSERT INTO SUBJECTS VALUES ('ASP','ASP.NET');
+ 
+
+
+
+ INSERT INTO PUBLISHERS VALUES (1,'WILLEY','WDT@VSNL.NET','91-11-23260877');
+ INSERT INTO PUBLISHERS VALUES (2,'WROX','INFO@WROX.COM',NULL);
+ INSERT INTO PUBLISHERS VALUES (3,'TATA MCGRAW-HILL','FEEDBACK@TATAMCGRAWHILL.COM','91-11-33333322');
+ INSERT INTO PUBLISHERS VALUES (4,'TECHMEDIA','BOOKS@TECHMEDIA.COM','91-11-33257660');
+
+
+
+ INSERT INTO AUTHORS VALUES (101, 'HERBERT SCHILD','HERBERT@YAHOO.COM',NULL);
+ INSERT INTO AUTHORS VALUES (102, 'JAMES GOODWILL','GOODWILL@HOTMAIL.COM',NULL);
+ INSERT INTO AUTHORS VALUES (103, 'DAVAID HUNTER','HUNTER@HOTMAIL.COM',NULL);
+ INSERT INTO AUTHORS VALUES (104, 'STEPHEN WALTHER','WALTHER@GMAIL.COM',NULL);
+ INSERT INTO AUTHORS VALUES (105, 'KEVIN LONEY','LONEY@ORACLE.COM',NULL);
+ INSERT INTO AUTHORS VALUES (106, 'ED. ROMANS','ROMANS@THESERVERSIDE.COM',NULL);
+
+
+
+INSERT INTO TITLES VALUES (1001,'ASP.NET UNLEASHED',4,'ASP','2002-04-12','P',540);
+INSERT INTO TITLES VALUES (1002,'ORACLE10G COMP. REF.',3,'ORA','2005-05-01','P',575);
+INSERT INTO TITLES VALUES (1003,'MASTERING EJB',1,'JEE','2005-02-03','P',475);
+INSERT INTO TITLES VALUES (1004,'JAVA COMP. REF',3,'JAVA','2005-04-03','P',499);
+INSERT INTO TITLES VALUES (1005,'PRO. VB.NET',2,'VB','2005-06-15','P',450);
+
+
+
+INSERT INTO TITLEAUTHORS VALUES (1001,104,1);
+INSERT INTO TITLEAUTHORS VALUES (1002,105,1);
+
+INSERT INTO TITLEAUTHORS VALUES (1003,106,1);
+
+INSERT INTO TITLEAUTHORS VALUES (1004,101,1);
+
+INSERT INTO TITLEAUTHORS VALUES (1005,103,1);
+INSERT INTO TITLEAUTHORS VALUES (1005,102,2);
+SELECT * FROM Subjects WHERE SName LIKE 'Oracle%';
+SELECT * FROM Subjects WHERE SName LIKE 'j%';
+SELECT * FROM Subjects WHERE SName LIKE '%.net';
+SELECT * FROM Authors WHERE AName LIKE '%er';
+SELECT * FROM PUBLISHERS WHERE PName LIKE '%hill%';
+
+SELECT * FROM titles WHERE price<500;
+SELECT title FROM titles WHERE  PUBDATE<'2005-04-03';
+SELECT Sname FROM subjects WHERE  SUBID = 'java' or SUBID ='jee';
+SELECT Aname FROM Authors WHERE AUID>103;
+SELECT * FROM Titles WHERE titleid=101 or price > 400;
+SELECT * FROM PUBLISHERS WHERE PName in ('TECHMEDIA','WROX');
+SELECT MAX(price) FROM titles;
+SELECT 	AVG(importance) FROM TITLEAUTHORS;
+SELECT count(AUID) FROM authors;
+SELECT sum(price) FROM titles;
+select title from titles where MONTHNAME(PUBDATE)<04;
+select year(SYSDATE());
+select month(SYSDATE());
+select last_day(pubdate) from titles where subid='java';
+create table emplyee
+(
+emp_id int(10),
+emp_name char(50)
+);
+
+insert into emplyee value(1,'Saurabh Salunkhe'),(2,'Rutvij '),(3,'Shamal'),(4,'shital');
+ALTER TABLE emplyee add COLUMN dept_id int after emp_name;
+ALTER TABLE emplyee MODIFY COLUMN emp_name VARCHAR(50);
+ALTER TABLE emplyee RENAME Scott;
+TRUNCATE scott;
+
+create table Emp
+(
+sal float(7,3)
+);
+insert into emp value (1234.567),(1530.019),(1652.786),(1775.156);
+SELECT ROUND(1234.567, 1);
+SELECT ROUND(1530.019, 2);
+SELECT ROUND(1652.786, 0);
+SELECT ROUND(1775.156);
+select sal, round(sal,-2)from emp; 
+select sal, truncate(sal,1)from emp;
+SELECT sal,CEILING(sal)from emp;
+SELECT sal,floor(sal)from emp;
+SELECT sal,sign(sal)from emp;
+SELECT sal,mod(sal,10)from emp;
+SELECT sal,sqrt(sal)from emp;
+SELECT sal,power(sal,2)from emp;
+select char_length("CDAC  juhu");
+select concat("CDAC","JUHU");
+select concat('CDA','C','  ',"juhu");
+select concat_ws(" - ", 'CDAC','juhu');
+select find_in_set('a' , "f,g,k,a,b");
+select find_in_set('ju',"cdac,ju,juhu");
+select lower("CADC JUHU");
+select repeat("CDAC-" , 3);
+select replace("CDAC juhu",'u','kh');
+select substring("CADC mumbai",4);
+select substring("CADC mumbai", 6 , 3);
+select length("cdac");
+select sysdate();
+select current_date();
+select current_date()+1;
+SELECT CURDATE()+0;
+select CURRENT_TIME();
+select current_time()+0;
+select monthname("1998-08-16");
+select dayname("1996-11-06");
+select dayofweek("1998-08-16");
+SELECT LAST_DAY('1998-08-16');
+select makedate(2021,130);
+ SELECT HOUR('11:05:03');
+ select now();
+ SELECT DATE_ADD('1998-07-16', INTERVAL 31 DAY);
